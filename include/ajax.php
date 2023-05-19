@@ -66,14 +66,15 @@ class Ajax {
     private function getProjectsAssignments(&$projects)
     {
         $assignments=[];
-        foreach ($projects as $project) {
+        foreach ($projects as &$project) {
 
-            $sql = "SELECT * FROM assignments WHERE ProjectId=:project_id";
+            $sql = "SELECT * FROM assignments JOIN users ON users.Id = UserId JOIN statuses ON statuses.Id = StatusId   WHERE ProjectId=:project_id";
             $params = array(
                 ':project_id' => $project["Id"],
             );
             $stmt = $this->db->runQuery($sql,$params);
             $project["assignments"] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
         }
         
     }
@@ -129,9 +130,7 @@ class Ajax {
             ':email' => $email,
             ':password' => $password,
         );
-
         $stmt = $this->db->runQuery($sql, $params);
-
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if($user){
@@ -146,14 +145,13 @@ class Ajax {
             else {
                 echo json_encode(["success" => false,"message"=>"User not Exists"]);
             }
-    
-        
     }
     public function logOut() {
             unset($_SESSION["user_id"]);
             header("location:/");
-        }
+    }
 
+    
     public function  addProject(){
         if(isset($_SESSION['user_id'])){
 
@@ -169,13 +167,47 @@ class Ajax {
                     ':DueDate' => $DueDate,
                     ':user_id' => $_SESSION['user_id'],
                 );
-                
                 $stmt = $this->db->runQuery($sql, $params);
-                
                 return json_encode(["success" => true, "data" => $stmt]);
             } catch (PDOException $e) {
                 return json_encode(["success" => false, "message" => $e->getMessage()]);
             }
+        }
+        else {
+            header("location:/");
+        }
+    }
+    public function addAssignment()
+    {
+        if(isset($_SESSION['user_id'])){
+            try {
+                $input = json_decode(file_get_contents('php://input'),true);
+
+                $name = $input["Name"];
+                $DueDate =$input["DueDate"];
+                $UserId =$input["UserId"];
+                $Description =$input["Description"];
+                $ProjectId =$input["ProjectId"];
+                $statusId=1;
+                
+                $sql = "INSERT INTO assignments (Name, Description,DueDate, UserId,ProjectId,StatusId) VALUES (:name, :Description, :DueDate, :user_id,:ProjectId, :statusId)";
+                $params = array(
+                    ':name' => $name,
+                    ':DueDate' => $DueDate,
+                    ':Description' => $Description,
+                    ':ProjectId' => $ProjectId,
+                    ':user_id' => $UserId,
+                    ':statusId'=>$statusId
+                );
+                $stmt = $this->db->runQuery($sql, $params);
+                return json_encode(["success" => true, "data" => $stmt]);
+            }
+            catch (Exception $e) {
+                return json_encode(["success" => false, "message" => $e->getMessage()]);
+            }
+        }
+        else{
+            header("location:/");
         }
     }
 

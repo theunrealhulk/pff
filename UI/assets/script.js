@@ -1,16 +1,24 @@
 $(document).ready(function(){
+    var projectId=""
+    $('.modal').modal();
+    $('.T').click((e)=>{
+        projectId=e.target.getAttribute('data-project-id');
+    })
+    $('.collapsible').collapsible();
+    $('select').formSelect();
     $('form').submit(function(e) {
         e.preventDefault();
 
         // Get the submitted form
         var submittedForm = $(this);
-
         // Get all form values
         var formValues = {};
         submittedForm.find('input, select, textarea').each(function() {
-            var inputName = $(this).attr('name');
+            var inputName = $(this).attr('name')==undefined?'noName': $(this).attr('name');
             var inputValue = $(this).val();
             formValues[inputName] = inputValue;
+            formValues["ProjectId"] = projectId;
+
         });
 
         // Log form values to the console
@@ -30,7 +38,7 @@ $(document).ready(function(){
             console.log('Response:', data);
             // Handle the response data
             let successMessage = submittedForm[0].name=="login"?"successfully logged In":"Your created a new User"
-            let failMessage = submittedForm[0].name=="login"?"Fail to log In":"Fail to create  new User"
+            
             Swal.fire({
                 icon: 'success',
                 title: successMessage,
@@ -42,6 +50,7 @@ $(document).ready(function(){
             
         })
         .catch(error => {
+            let failMessage = submittedForm[0].name=="login"?"Fail to log In":"Fail to run Operation"
             console.error('Error:', error);
             // Handle any errors that occurred during the request
             Swal.fire({
@@ -51,9 +60,8 @@ $(document).ready(function(){
               })
         });
     });
-    $('.modal').modal();
-    $('.collapsible').collapsible();
-    $('select').formSelect();
+    
+    
     
 })
 

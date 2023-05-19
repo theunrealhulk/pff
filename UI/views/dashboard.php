@@ -69,14 +69,34 @@ $users = json_decode($users,true);
                 </ul>
                 <ul class="detail-items left">
                     <li>
-                        <span  class="waves-effect waves-light  modal-trigger" href="#modal1"><i class="material-icons purple-text darken-4">edit</i></span>
+                        <span  class="waves-effect waves-light T modal-trigger" href="#modal1" ><i data-project-id="<?=$project["Id"]?>" class="material-icons purple-text darken-4">edit</i></span>
                     </li>
                     <li>
-                    <span  class="waves-effect waves-light  modal-trigger" href="#modal2"><i class="material-icons purple-text darken-4">assignment</i></span>
+                    <span  class="waves-effect waves-light T modal-trigger" href="#modal2" ><i data-project-id="<?=$project["Id"]?>" class="material-icons purple-text darken-4">assignment</i></span>
                     </li>
                 </ul>
             </div>
-        <div class="collapsible-body"><span>Projects Assignments if Any*</span></div>
+        <div class="collapsible-body">
+            <?php foreach ($project["assignments"] as $assignment):?>
+                <ul class="detail-items">
+                    <li>
+                        <i class="material-icons">assignment</i>
+                    </li>
+                    <li>
+                        <?=$assignment["Name"]?>
+                    </li>
+                    <li>
+                        <?=logDate($assignment["DueDate"])?>
+                    </li>
+                    <li>
+                        <i class="material-icons">person</i> <?=logDate($assignment["Username"])?>
+                    </li>
+                    <li>
+                    <i class="material-icons">sync</i><?=logDate($assignment["Label"])?>
+                    </li>
+                </ul>
+            <?php endforeach ?>
+        </div>
         </li>
         <?php endforeach?>
         
@@ -87,9 +107,6 @@ $users = json_decode($users,true);
 
     <ul class="collection unfinished">
       <li class="collection-item">nigga 1</li>
-      <li class="collection-item">nigga 2</li>
-      <li class="collection-item">nigga 3</li>
-      <li class="collection-item">nigga 4</li>
     </ul>
 
 </div>
@@ -97,14 +114,14 @@ $users = json_decode($users,true);
     <div id="modal1" class="modal">
     <div class="modal-content">
         <h4>Add New Project</h4>
-        <form action="/addProject" method="post">
+        <form action="/addProject" name="newProject" method="post">
             <div class="form-group">
-                <label for="exampleInputEmail1">Name</label>
-                <input name="Name" type="text" class="form-control" id="name" aria-describedby="NameHelp" placeholder="Enter Project Name" required>
+                <label for="Name">Name</label>
+                <input name="Name" type="text" class="form-control" id="Name" aria-describedby="NameHelp" placeholder="Enter Project Name" required>
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail1">Due Date</label>
-                <input name="DueDate" type="date" class="form-control" id="name" aria-describedby="NameHelp" placeholder="Enter Project Name" required>
+                <label for="DueDate">Due Date</label>
+                <input name="DueDate" type="date" class="form-control" id="DueDate" aria-describedby="NameHelp" placeholder="Enter Project Name" required>
             </div>
         </div>
         <div class="modal-footer">
@@ -117,26 +134,26 @@ $users = json_decode($users,true);
     <div id="modal2" class="modal" style="height:100%">
         <div class="modal-content">
             <h4>Add New Assignment</h4>
-            <form action="/addProject" method="post">
+            <form action="/addAssignment" name="newAssignment" method="post">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Name</label>
-                    <input name="Name" type="text" class="form-control" id="name" aria-describedby="NameHelp" placeholder="Enter Assignment Name" required>
+                    <label for="assignmentName">Name</label>
+                    <input name="Name" type="text" class="form-control" id="assignmentName" aria-describedby="NameHelp" placeholder="Enter Assignment Name" required>
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Due Date</label>
-                    <input name="DueDate" type="date" class="form-control" id="dueDate" aria-describedby="NameHelp" placeholder="Enter Project Name" required>
+                    <label for="assignmentDate">Due Date</label>
+                    <input name="DueDate" type="date" class="form-control" id="assignmentDate" aria-describedby="NameHelp" placeholder="Enter Project Name" required>
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Description</label>
-                    <textarea name="Description" type="date" class="form-control materialize-textarea" id="dueDate" aria-describedby="NameHelp" placeholder="Assignment Description"></textarea>
+                    <label for="assignmentDesc">Description</label>
+                    <textarea name="Description" type="date" class="form-control materialize-textarea" id="assignmentDesc" aria-describedby="NameHelp" placeholder="Assignment Description"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Assignee</label>
+                    <label for="UserId">Assignee</label>
                     <div class="input-field col s12">
-                        <select name="UserId">
+                        <select name="UserId" id="UserId">
                             <option value="" disabled selected>Choose your Assignee</option>
                             <?php foreach ($users as $u): ?>
-                                <option value="<?=$u["id"]?>"><?=$u["Username"]?></option>
+                                <option name="userOption" value="<?=$u["id"]?>"><?=$u["Username"]?></option>
                             <?php endforeach?>
                             
                         </select>
