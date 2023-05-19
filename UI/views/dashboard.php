@@ -9,7 +9,7 @@ $thisDay=0;
 $thisDay = CountDateWithTodayOnCollection($stats["projects"],"DueDate","==");
 $thisWeek=0;
 $thisWeek = CountDatesInThisWeekOnCollection($stats["projects"],"DueDate");
-            
+$users = json_decode($users,true);
 ?>
   <nav class="purple darken-4">
     <div class="nav-wrapper">
@@ -93,7 +93,7 @@ $thisWeek = CountDatesInThisWeekOnCollection($stats["projects"],"DueDate");
     </ul>
 
 </div>
-    <!-- Modal Structure -->
+    <!-- New Project -->
     <div id="modal1" class="modal">
     <div class="modal-content">
         <h4>Add New Project</h4>
@@ -113,26 +113,32 @@ $thisWeek = CountDatesInThisWeekOnCollection($stats["projects"],"DueDate");
     </form>
     </div>
 
-        <!-- Modal Structure -->
-    <div id="modal2" class="modal">
+        <!-- New Assignment -->
+    <div id="modal2" class="modal" style="height:100%">
         <div class="modal-content">
             <h4>Add New Assignment</h4>
             <form action="/addProject" method="post">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Name</label>
-                    <input name="Name" type="text" class="form-control" id="name" aria-describedby="NameHelp" placeholder="Enter Project Name" required>
+                    <input name="Name" type="text" class="form-control" id="name" aria-describedby="NameHelp" placeholder="Enter Assignment Name" required>
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Due Date</label>
                     <input name="DueDate" type="date" class="form-control" id="dueDate" aria-describedby="NameHelp" placeholder="Enter Project Name" required>
                 </div>
                 <div class="form-group">
+                    <label for="exampleInputEmail1">Description</label>
+                    <textarea name="Description" type="date" class="form-control materialize-textarea" id="dueDate" aria-describedby="NameHelp" placeholder="Assignment Description"></textarea>
+                </div>
+                <div class="form-group">
                     <label for="exampleInputEmail1">Assignee</label>
                     <div class="input-field col s12">
-                        <select>
-                            <option value="1">Option 1</option>
-                            <option value="2">Option 2</option>
-                            <option value="3">Option 3</option>
+                        <select name="UserId">
+                            <option value="" disabled selected>Choose your Assignee</option>
+                            <?php foreach ($users as $u): ?>
+                                <option value="<?=$u["id"]?>"><?=$u["Username"]?></option>
+                            <?php endforeach?>
+                            
                         </select>
                     </div>
                 </div>

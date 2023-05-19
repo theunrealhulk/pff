@@ -21,13 +21,12 @@ class Ajax {
     public function index(){
         $loggedIn = isset($_SESSION['user_id']);
         if ($loggedIn) {
-            $user = $this->getConnectedUser();
-            $stats= $this->getStats();
-            $UserData= $this->getUserData();
+
             return Ajax::renderView("UI/views/dashboard.php",[
-                'user'=>$user,
-                'stats'=>$stats,
-                'UserData'=>$UserData
+                'user'=>$this->getConnectedUser(),
+                'users'=>$this->getUsers(),
+                'stats'=>$this->getStats(),
+                'UserData'=>$this->getUserData()
             ]);
         } else {
              return Ajax::renderView("UI/views/login.php");
