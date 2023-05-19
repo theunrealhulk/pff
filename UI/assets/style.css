@@ -1,0 +1,21 @@
+span.counter{
+    font-size: larger;
+    font-weight: bolder;
+}
+
+.detail-items {
+    display: flex;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .detail-items li {
+    margin-right: 10px; /* Optional: Add some spacing between the items */
+  }
+  .detail-items.left
+  {
+    justify-content: flex-start;
+  }
+  .unfinished{
+    border: 3px dashed orange !important;
+  }
