@@ -40,12 +40,12 @@ class Ajax {
     }
     public function getStats() {
         $stats=[];
-        $sql = "SELECT *  FROM projects WHERE IsArchived='0'";
+        $sql = "SELECT *  FROM projects WHERE  isDeleted='0'";
         $stmt = $this->db->runQuery($sql);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $stats["projects"]= $data;
 
-        $sql = "SELECT *  FROM assignments";
+        $sql = "SELECT *  FROM assignments WHERE isDeleted='0'";
         $stmt = $this->db->runQuery($sql);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $stats["assignments"]= $data;
@@ -54,13 +54,24 @@ class Ajax {
     }
     public function getUserData() {
         $UserData=[]; 
-        $sql = "SELECT * FROM projects WHERE IsArchived='0' AND UserId=:user_id";
+        $sql = "SELECT * FROM projects WHERE IsArchived='0' AND isDeleted ='0' AND UserId=:user_id";
         $params = array(
             ':user_id' => $_SESSION["user_id"],
         );
         $stmt = $this->db->runQuery($sql,$params);
         $UserData["projects"] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $sql = "SELECT assignments.*,users.Username as Owner,projects.name as Project,Label as Status  FROM assignments JOIN projects ON ProjectId=projects.Id JOIN users ON  projects.UserId =users.Id JOIN statuses ON StatusId=statuses.Id  WHERE  assignments.isDeleted ='0' AND assignments.UserId=:user_id";
+        $params = array(
+            ':user_id' => $_SESSION["user_id"],
+        );
+        $stmt = $this->db->runQuery($sql,$params);
+        $UserData["assignments"] = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $this->getProjectsAssignments($UserData["projects"]);
+
+        $sql = "SELECT * FROM statuses";
+        $stmt = $this->db->runQuery($sql);
+        $UserData["statuses"] = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $UserData;
     }
     private function getProjectsAssignments(&$projects)
@@ -68,7 +79,7 @@ class Ajax {
         $assignments=[];
         foreach ($projects as &$project) {
 
-            $sql = "SELECT * FROM assignments JOIN users ON users.Id = UserId JOIN statuses ON statuses.Id = StatusId   WHERE ProjectId=:project_id";
+            $sql = "SELECT assignments.*,users.Username,statuses.Label as Status FROM assignments JOIN users ON users.Id = UserId JOIN statuses ON statuses.Id = StatusId   WHERE ProjectId=:project_id AND isDeleted = '0'";
             $params = array(
                 ':project_id' => $project["Id"],
             );
@@ -201,6 +212,47 @@ class Ajax {
                 );
                 $stmt = $this->db->runQuery($sql, $params);
                 return json_encode(["success" => true, "data" => $stmt]);
+            }
+            catch (Exception $e) {
+                return json_encode(["success" => false, "message" => $e->getMessage()]);
+            }
+        }
+        else{
+            header("location:/");
+        }
+    }
+    public function deleteProject(){
+        if(isset($_SESSION['user_id'])){
+            try {
+                $input = json_decode(file_get_contents('php://input'),true);
+
+                $sql = "UPDATE projects SET isDeleted = '1' WHERE Id= :Id";
+                $params = array(
+                    ':Id' => $input["Id"],
+                );
+                $stmt = $this->db->runQuery($sql, $params);
+                return json_encode(["success" => true]);
+            }
+            catch (Exception $e) {
+                return json_encode(["success" => false, "message" => $e->getMessage()]);
+            }
+        }
+        else{
+            header("location:/");
+        }
+    }
+
+    public function deleteAssignment(){
+        if(isset($_SESSION['user_id'])){
+            try {
+                $input = json_decode(file_get_contents('php://input'),true);
+
+                $sql = "UPDATE assignments SET isDeleted = '1' WHERE Id= :Id";
+                $params = array(
+                    ':Id' => $input["Id"],
+                );
+                $stmt = $this->db->runQuery($sql, $params);
+                return json_encode(["success" => true]);
             }
             catch (Exception $e) {
                 return json_encode(["success" => false, "message" => $e->getMessage()]);

@@ -18,6 +18,9 @@ $routes = array(
     '/logout' => 'logout',
     '/addProject' => 'addProject',
     '/addAssignment' => 'addAssignment',
+    '/deleteProject' => 'deleteProject',
+    '/deleteAssignment' => 'deleteAssignment'
+    
     // Add more routes as needed
 );
 // Get the requested URL path

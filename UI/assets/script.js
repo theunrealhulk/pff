@@ -1,11 +1,74 @@
+function  deleteProject(id){
+
+    deleteFromDb(id,"Id","/deleteProject")
+}
+function  deleteAssignment(id){
+
+    deleteFromDb(id,"Id","/deleteAssignment")
+}
+function deleteFromDb(val,columnName,url)
+{
+    console.log("deleteFromDb")
+    let data={}
+    data[columnName]=val
+    Swal.fire({
+        title: 'Are you sure?',
+        // text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            console.log('aaaaasas')
+             //send delete request to backend
+             const requestOptions = {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+              };
+              console.log(requestOptions);
+             fetch(url,requestOptions).then(result)
+             .then(response => response.json())
+             .then((data) =>{
+                console.log(data)
+                    if (data.success) {
+                        window.location.reload()
+                    }
+                    else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                          })
+                    }
+             })
+             
+        //   Swal.fire(
+        //     'Deleted!',
+        //     'Your file has been deleted.',
+        //     'success'
+        //   )
+        }
+      })
+}
 $(document).ready(function(){
     var projectId=""
+    
     $('.modal').modal();
+    $('.collapsible').collapsible();
+    $('select').formSelect();
+    $('.dropdown-trigger').dropdown();
     $('.T').click((e)=>{
         projectId=e.target.getAttribute('data-project-id');
     })
-    $('.collapsible').collapsible();
-    $('select').formSelect();
+    let modal = document.getElementById('updateProject')
+    modal.addEventListener('open', function() {
+        console.log("----------------")
+      });
     $('form').submit(function(e) {
         e.preventDefault();
 
@@ -62,6 +125,7 @@ $(document).ready(function(){
     });
     
     
+
     
 })
 
