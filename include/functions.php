@@ -66,7 +66,6 @@ function logDate($datestring)
     return substr($datestring,0,10);
 }
 
-
 function dd($variable)
 {
     $highlightedVariable = highlight_string("<?php\n" . var_export($variable, true), true);
@@ -76,12 +75,6 @@ function dd($variable)
             padding: 10px;
         }
     </style>';
-    $javascript = '<script>
-        function toggleCode(blockId) {
-            var block = document.getElementById(blockId);
-            block.style.display = (block.style.display === "none") ? "block" : "none";
-        }
-    </script>';
 
     $backtrace = debug_backtrace();
     $caller = $backtrace[1]; // Get information about the calling file and line
@@ -89,8 +82,7 @@ function dd($variable)
     echo $css;
     echo $javascript;
     echo '<div class="code-block">';
-    echo '<div onclick="toggleCode(\'code-block-content\')" style="cursor: pointer;"><strong>Click to toggle code:</strong></div>';
-    echo '<pre id="code-block-content" style="display: none;">';
+    echo '<pre id="code-block-content"">';
     echo 'Called from: ' . $caller['file'] . ' on line ' . $caller['line'] . PHP_EOL;
     echo $highlightedVariable;
     echo '</pre>';
