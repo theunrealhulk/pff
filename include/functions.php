@@ -80,7 +80,6 @@ function dd($variable)
     $caller = $backtrace[1]; // Get information about the calling file and line
 
     echo $css;
-    echo $javascript;
     echo '<div class="code-block">';
     echo '<pre id="code-block-content"">';
     echo 'Called from: ' . $caller['file'] . ' on line ' . $caller['line'] . PHP_EOL;
