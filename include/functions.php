@@ -66,7 +66,13 @@ function logDate($datestring)
     return substr($datestring,0,10);
 }
 
+
 function dd($variable)
+{
+    d($variable);   
+    exit;
+}
+function d($variable)
 {
     $highlightedVariable = highlight_string("<?php\n" . var_export($variable, true), true);
     $css = '<style>
@@ -75,16 +81,17 @@ function dd($variable)
             padding: 10px;
         }
     </style>';
+    
 
     $backtrace = debug_backtrace();
     $caller = $backtrace[1]; // Get information about the calling file and line
 
     echo $css;
-    echo '<div class="code-block">';
-    echo '<pre id="code-block-content"">';
+
+
+    echo '<pre id="code-block-content" >';
     echo 'Called from: ' . $caller['file'] . ' on line ' . $caller['line'] . PHP_EOL;
     echo $highlightedVariable;
     echo '</pre>';
     echo '</div>';
-    exit;
 }
