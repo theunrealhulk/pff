@@ -2,6 +2,45 @@ function  deleteProject(id){
 
     deleteFromDb(id,"Id","/deleteProject")
 }
+function requestOptions(data)
+{
+    return {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      };
+}
+function readFromDb(url,data,element,renderHTMLfunction){
+    
+      fetch(url,requestOptions(data)).then(result)
+      .then(response => response.json())
+      .then((data) =>{
+         console.log(data)
+             if (data.success) {
+                element.innerHTML=renderHTMLfunction(data)
+             }
+             else{
+                 Swal.fire({
+                     icon: 'error',
+                     title: 'Oops...',
+                     text: 'Something went wrong!',
+                   })
+             }
+      })
+}
+
+function changeStatus(statusId,assignmentId)
+{
+    fetch ("/updateStatus",requestOptions({statusId:statusId,assignmentId:assignmentId}))
+    .then(response => response.json())
+    .then((data) =>{
+        if(data.success){
+            window.location.reload()
+        }
+    })
+}
 function  deleteAssignment(id){
 
     deleteFromDb(id,"Id","/deleteAssignment")
@@ -21,17 +60,8 @@ function deleteFromDb(val,columnName,url)
         confirmButtonText: 'Yes, delete it!'
       }).then((result) => {
         if (result.isConfirmed) {
-            console.log('aaaaasas')
-             //send delete request to backend
-             const requestOptions = {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-              };
-              console.log(requestOptions);
-             fetch(url,requestOptions).then(result)
+              console.log(requestOptions(data));
+             fetch(url,requestOptions(data)).then(result)
              .then(response => response.json())
              .then((data) =>{
                 console.log(data)
@@ -46,12 +76,6 @@ function deleteFromDb(val,columnName,url)
                           })
                     }
              })
-             
-        //   Swal.fire(
-        //     'Deleted!',
-        //     'Your file has been deleted.',
-        //     'success'
-        //   )
         }
       })
 }
@@ -65,10 +89,7 @@ $(document).ready(function(){
     $('.T').click((e)=>{
         projectId=e.target.getAttribute('data-project-id');
     })
-    let modal = document.getElementById('updateProject')
-    modal.addEventListener('open', function() {
-        console.log("----------------")
-      });
+
     $('form').submit(function(e) {
         e.preventDefault();
 

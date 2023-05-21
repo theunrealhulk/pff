@@ -262,5 +262,24 @@ class Ajax {
             header("location:/");
         }
     }
-
+    public function updateStatus(){
+        if(isset($_SESSION['user_id'])){
+            try {
+                $input = json_decode(file_get_contents('php://input'),true);
+                $sql = "UPDATE assignments SET StatusId = :statusId WHERE Id= :assignmentId";
+                $params = array(
+                    ':statusId' => $input["statusId"],
+                    ':assignmentId' => $input["assignmentId"],
+                );
+                $stmt = $this->db->runQuery($sql, $params);
+                return json_encode(["success" => true]);
+            }catch (Exception $e){
+                return json_encode(["success" => false, "message" => $e->getMessage()]);
+            }
+        }
+        else{
+            header("location:/");
+        }
+    }
+    
 }

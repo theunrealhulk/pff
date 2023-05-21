@@ -151,7 +151,7 @@ foreach($stats['projects'] as $project)
                 <!-- Dropdown Structure -->
                 <ul id='dropdown1' class='dropdown-content' style="width:20%;">
                     <?php foreach($UserData["statuses"] as $status):?>
-                    <li><a onclick="alert('<?=$status['Id'].','.$assignment['Id']?>')" data-id="<?=$status["Id"]?>" ><?=$status["Label"]?></a></li>
+                    <li><a onclick="changeStatus(<?=$status['Id']?>,<?=$assignment['Id']?>)" data-id="<?=$status["Id"]?>" ><?=$status["Label"]?></a></li>
                     <?php endforeach?>
                 </ul>
             </li>

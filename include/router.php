@@ -19,7 +19,8 @@ $routes = array(
     '/addProject' => 'addProject',
     '/addAssignment' => 'addAssignment',
     '/deleteProject' => 'deleteProject',
-    '/deleteAssignment' => 'deleteAssignment'
+    '/deleteAssignment' => 'deleteAssignment',
+    '/updateStatus'=>'updateStatus'
     
     // Add more routes as needed
 );
