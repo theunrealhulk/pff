@@ -3,7 +3,7 @@ require_once "UI/header.php";
 require_once "include/router.php";
 ?>
 <div class="container">
-<h2>Projects Manager</h2>
+<h2><img src="UI/assets/logo.svg" alt=""></h2>
     <form action="/login" name="login" method="post">
         <h3>Login</h3>
         <div class="form-group">

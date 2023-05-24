@@ -32,7 +32,7 @@ foreach($stats['projects'] as $project)
 ?>
   <nav class="purple darken-4">
     <div class="nav-wrapper">
-      <a href="#" class="brand-logo">Dashboard</a>
+      <a href="#" class="brand-logo"><img src="UI/assets/logo-white.png" style="width:90%" ></a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
           <li><a><span class="white-text badge blue"><?=$activeProjects?>/<?=count($stats["projects"])?> Projects</span></a></li>
           <li><a><span class="white-text badge orange"><?=$activeAssignments?>/<?=count($stats["assignments"])?> Assignments</span></a></li>
@@ -237,38 +237,22 @@ foreach($stats['projects'] as $project)
             </form>
     </div>
 
-            <!-- New Assignment -->
-    <div id="updateAssignment" class="modal" style="height:100%">
-        <div class="modal-content">
-            <h4>Update Assignment</h4>
-            <form action="/addAssignment" name="newAssignment" method="post">
-                <div class="form-group">
-                    <label for="assignmentName">Name</label>
-                    <input name="Name" type="text" class="form-control" id="assignmentName" aria-describedby="NameHelp" placeholder="Enter Assignment Name" required>
-                </div>
-                <div class="form-group">
-                    <label for="assignmentDate">Due Date</label>
-                    <input name="DueDate" type="date" class="form-control" id="assignmentDate" aria-describedby="NameHelp" placeholder="Enter Project Name" required>
-                </div>
-                <div class="form-group">
-                    <label for="assignmentDesc">Description</label>
-                    <textarea name="Description" type="date" class="form-control materialize-textarea" id="assignmentDesc" aria-describedby="NameHelp" placeholder="Assignment Description"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="UserId">Assignee</label>
-                    <div class="input-field col s12">
-                        <select name="UserId" id="UserId">
-                            <option value="" disabled selected>Choose your Assignee</option>
-                            <?php foreach ($users as $u): ?>
-                                <option name="userOption" value="<?=$u["id"]?>"><?=$u["Username"]?></option>
-                            <?php endforeach?>
-                            
-                        </select>
-                    </div>
-                </div>
 
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-info"><i class="material-icons">add_circle_outline</i></button>
-                </div>
-            </form>
+    <div id="updateAssignment" class="modal">
+    <div class="modal-content">
+        <h4>Update Assignment</h4>
+        <form action="/UpdateProject" name="newProject" method="post">
+            <div class="form-group">
+                <label for="Name">Name</label>
+                <input name="Name" type="text" class="form-control" id="Name" aria-describedby="NameHelp" placeholder="Enter Project Name" required>
+            </div>
+            <div class="form-group">
+                <label for="DueDate">Due Date</label>
+                <input name="DueDate" type="date" class="form-control" id="DueDate" aria-describedby="NameHelp" placeholder="Enter Project Name" required>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-info"><i class="material-icons">refresh</i></button>
+        </div>
+    </form>
     </div>
